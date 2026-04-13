@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROCESSION — Signal Processing Unit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #EEECEA;
+            --fg: #1A1918;
+            --muted: #7A7672;
+            --accent: #B5352A;
+            --rule: #CCCAC5;
+            --mono: 'IBM Plex Mono', monospace;
+            --sans: 'Inter', sans-serif;
+        }
+
+        html {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .nav-mark {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .nav-meta {
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            padding: 72px 0 64px;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .hero-text h1 {
+            font-family: var(--mono);
+            font-size: clamp(40px, 7vw, 80px);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 0.95;
+            margin-bottom: 28px;
+        }
+
+        .hero-text h1 span {
+            color: var(--muted);
+        }
+
+        .tagline {
+            font-size: 15px;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        .tagline strong {
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        /* ─── PEDAL ILLUSTRATION ─── */
+        .pedal-wrap {
+            display: flex;
+            justify-content: center;
+            padding: 24px 0;
+        }
+
+        .pedal {
+            position: relative;
+            width: 124px;
+            height: 160px;
+            background: #D8D5CE;
+            border: 1.5px solid #1A1918;
+            border-radius: 7px 7px 9px 9px;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.15),
+                0 4px 16px rgba(0,0,0,0.18);
+        }
+
+        .pedal-name {
+            position: absolute;
+            top: 13px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 6.5px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #6A6763;
+        }
+
+        .pedal-knob-outer {
+            position: absolute;
+            top: 34px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #252220;
+            border: 1.5px solid #3A3735;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* knob indicator line */
+        .pedal-knob-outer::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 11px;
+            background: #DDDBD8;
+            border-radius: 1px;
+        }
+
+        /* knob inner ring */
+        .pedal-knob-inner {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #1A1816;
+            border: 1px solid #323030;
+        }
+
+        /* LED */
+        .pedal-led {
+            position: absolute;
+            top: 97px;
+            right: 19px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 5px rgba(181, 53, 42, 0.5);
+        }
+
+        /* Footswitch */
+        .pedal-switch {
+            position: absolute;
+            bottom: 17px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #222020;
+            border: 1.5px solid #141312;
+            box-shadow:
+                0 3px 6px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+
+        /* Input/output jacks */
+        .jack {
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #1E1C1A;
+            border: 1.5px solid #111;
+        }
+
+        .jack-in  { left: -5px; bottom: 38px; }
+        .jack-out { right: -5px; bottom: 38px; }
+
+        /* DC barrel jack */
+        .jack-dc {
+            width: 8px;
+            height: 5px;
+            border-radius: 2px;
+            background: #1E1C1A;
+            border: 1.5px solid #111;
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* ─── SECTIONS ─── */
+        .section {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 48px;
+            padding: 60px 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            text-transform: uppercase;
+            padding-top: 3px;
+        }
+
+        .section-label .num {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--rule);
+        }
+
+        /* ─── CONCEPT ─── */
+        .concept-text {
+            font-family: var(--sans);
+            font-size: 18px;
+            line-height: 1.65;
+            font-weight: 400;
+            max-width: 540px;
+            color: var(--fg);
+        }
+
+        /* ─── SPECS ─── */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            max-width: 540px;
+        }
+
+        .specs-table tr {
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .specs-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .specs-table td {
+            padding: 9px 0;
+            font-size: 12px;
+            vertical-align: top;
+        }
+
+        .specs-table td:first-child {
+            color: var(--muted);
+            width: 46%;
+            padding-right: 12px;
+        }
+
+        .specs-table td:last-child {
+            color: var(--fg);
+        }
+
+        /* ─── CTA ─── */
+        .cta {
+            padding: 72px 0 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .cta-eyebrow {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .cta h2 {
+            font-size: clamp(22px, 3.5vw, 32px);
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .cta-form {
+            display: flex;
+            margin-top: 4px;
+        }
+
+        .cta-form input[type="email"] {
+            background: transparent;
+            border: 1px solid var(--rule);
+            border-right: none;
+            padding: 11px 16px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--fg);
+            width: 250px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .cta-form input[type="email"]::placeholder {
+            color: var(--muted);
+        }
+
+        .cta-form input[type="email"]:focus {
+            border-color: var(--fg);
+        }
+
+        .cta-form button {
+            background: var(--fg);
+            color: var(--bg);
+            border: 1px solid var(--fg);
+            padding: 11px 22px;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            white-space: nowrap;
+        }
+
+        .cta-form button:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .cta-note {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.02em;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--rule);
+            padding: 18px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── MOBILE ─── */
+        @media (max-width: 640px) {
+            body { padding: 0 20px; }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 48px 0 40px;
+                gap: 40px;
+            }
+
+            .pedal-wrap { order: -1; }
+
+            .section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 44px 0;
+            }
+
+            .section-label { display: flex; gap: 8px; align-items: baseline; }
+            .section-label .num { margin-bottom: 0; }
+
+            .cta-form {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .cta-form input[type="email"] {
+                border-right: 1px solid var(--rule);
+                border-bottom: none;
+                width: 100%;
+            }
+
+            .cta-form input[type="email"]:focus {
+                border-color: var(--fg);
+            }
+
+            .cta-form button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <span class="nav-mark">Procession</span>
+        <span class="nav-meta">Signal Processing Unit &mdash; Series 01</span>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>PROC<br>ES<span>—</span><br>SION</h1>
+            <p class="tagline">One direction. <strong>&rarr;</strong></p>
+        </div>
+        <div class="pedal-wrap">
+            <div class="pedal">
+                <div class="pedal-name">Procession</div>
+                <div class="pedal-knob-outer">
+                    <div class="pedal-knob-inner"></div>
+                </div>
+                <div class="pedal-led"></div>
+                <div class="pedal-switch"></div>
+                <div class="jack jack-in"></div>
+                <div class="jack jack-out"></div>
+                <div class="jack-dc"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONCEPT -->
+    <section class="section">
+        <div class="section-label">
+            <span class="num">001</span>
+            Concept
+        </div>
+        <p class="concept-text">
+            An eight-stage internal chain runs in fixed sequence. The single knob sets how far into it your signal travels&nbsp;&mdash; from clean input to full process. No patch points. No edits. No way back.
+        </p>
+    </section>
+
+    <!-- SPECS -->
+    <section class="section">
+        <div class="section-label">
+            <span class="num">002</span>
+            Specifications
+        </div>
+        <table class="specs-table">
+            <tbody>
+                <tr>
+                    <td>Input impedance</td>
+                    <td>1 M&Omega;</td>
+                </tr>
+                <tr>
+                    <td>Output impedance</td>
+                    <td>100 &Omega;</td>
+                </tr>
+                <tr>
+                    <td>Operating voltage</td>
+                    <td>9V DC, centre negative</td>
+                </tr>
+                <tr>
+                    <td>Current draw</td>
+                    <td>120 mA</td>
+                </tr>
+                <tr>
+                    <td>Bypass</td>
+                    <td>True bypass, relay switching</td>
+                </tr>
+                <tr>
+                    <td>Internal chain</td>
+                    <td>8 stages, fixed sequence</td>
+                </tr>
+                <tr>
+                    <td>Knob resolution</td>
+                    <td>270&deg; rotation</td>
+                </tr>
+                <tr>
+                    <td>Enclosure</td>
+                    <td>Die-cast aluminium</td>
+                </tr>
+                <tr>
+                    <td>Dimensions</td>
+                    <td>93 &times; 119 &times; 31 mm</td>
+                </tr>
+                <tr>
+                    <td>Weight</td>
+                    <td>340 g</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <p class="cta-eyebrow">First production run &mdash; limited quantity</p>
+        <h2>Join the waitlist.</h2>
+        <form class="cta-form" onsubmit="return false;">
+            <input type="email" placeholder="your@email.com" autocomplete="email">
+            <button type="submit">Notify me</button>
+        </form>
+        <p class="cta-note">No updates beyond a shipping notification. No newsletter.</p>
+    </section>
+
+    <footer>
+        <span>PROCESSION &mdash; Series 01</span>
+        <span>&copy; 2025</span>
+    </footer>
+
+</body>
+</html>
