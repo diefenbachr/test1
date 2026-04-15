@@ -95,130 +95,18 @@
             font-weight: 400;
         }
 
-        /* ─── PEDAL ILLUSTRATION ─── */
+        /* ─── PEDAL IMAGE ─── */
         .pedal-wrap {
             display: flex;
             justify-content: center;
-            padding: 24px 0;
-        }
-
-        .pedal {
-            position: relative;
-            width: 124px;
-            height: 160px;
-            background: #D8D5CE;
-            border: 1.5px solid #1A1918;
-            border-radius: 7px 7px 9px 9px;
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.15),
-                0 4px 16px rgba(0,0,0,0.18);
-        }
-
-        .pedal-name {
-            position: absolute;
-            top: 13px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-family: var(--mono);
-            font-size: 6.5px;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: #6A6763;
-        }
-
-        .pedal-knob-outer {
-            position: absolute;
-            top: 34px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #252220;
-            border: 1.5px solid #3A3735;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-            display: flex;
             align-items: center;
-            justify-content: center;
         }
 
-        /* knob indicator line */
-        .pedal-knob-outer::after {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 11px;
-            background: #DDDBD8;
-            border-radius: 1px;
-        }
-
-        /* knob inner ring */
-        .pedal-knob-inner {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: #1A1816;
-            border: 1px solid #323030;
-        }
-
-        /* LED */
-        .pedal-led {
-            position: absolute;
-            top: 97px;
-            right: 19px;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 5px rgba(181, 53, 42, 0.5);
-        }
-
-        /* Footswitch */
-        .pedal-switch {
-            position: absolute;
-            bottom: 17px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #222020;
-            border: 1.5px solid #141312;
-            box-shadow:
-                0 3px 6px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.04);
-        }
-
-        /* Input/output jacks */
-        .jack {
-            position: absolute;
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #1E1C1A;
-            border: 1.5px solid #111;
-        }
-
-        .jack-in  { left: -5px; bottom: 38px; }
-        .jack-out { right: -5px; bottom: 38px; }
-
-        /* DC barrel jack */
-        .jack-dc {
-            width: 8px;
-            height: 5px;
-            border-radius: 2px;
-            background: #1E1C1A;
-            border: 1.5px solid #111;
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 0 0 3px 3px;
+        .pedal-img {
+            width: 100%;
+            max-width: 420px;
+            height: auto;
+            display: block;
         }
 
         /* ─── SECTIONS ─── */
@@ -426,17 +314,7 @@
             <p class="tagline">One direction. <strong>&rarr;</strong></p>
         </div>
         <div class="pedal-wrap">
-            <div class="pedal">
-                <div class="pedal-name">Procession</div>
-                <div class="pedal-knob-outer">
-                    <div class="pedal-knob-inner"></div>
-                </div>
-                <div class="pedal-led"></div>
-                <div class="pedal-switch"></div>
-                <div class="jack jack-in"></div>
-                <div class="jack jack-out"></div>
-                <div class="jack-dc"></div>
-            </div>
+            <img class="pedal-img" src="procession-3D-Pedal.png" alt="PROCESSION effects pedal">
         </div>
     </section>
 
